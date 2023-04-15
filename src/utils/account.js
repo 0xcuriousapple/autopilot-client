@@ -139,7 +139,6 @@ const authorise = async (t, botAddress, nodes) => {
   let callHash;
 
   if (customNodes && customNodes.length) {
-    console.log({ customNodes });
     for (const customNode of customNodes) {
       const {
         data: {
@@ -148,11 +147,16 @@ const authorise = async (t, botAddress, nodes) => {
           functionSelector,
         },
       } = customNode;
-      const {
-        data: { count, cadence },
-      } = cadenceNode;
+      let count = 1,
+        cadence = "1-m";
+      if (cadenceNode) {
+        count = cadenceNode.data.count;
+        cadence = cadenceNode.data.cadence;
+      }
+
       const mult = strToTS(cadence);
-      autopilotInterface.encodeFunctionData("setBot", [botAddress]);
+
+      console.log({ transferTarget, transferValue, functionSelector });
       const encoded = ethers.utils.defaultAbiCoder.encode(
         ["address", "uint256", "bytes"],
         [transferTarget, transferValue, functionSelector]

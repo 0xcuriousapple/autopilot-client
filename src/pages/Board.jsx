@@ -7,9 +7,15 @@ import ReactFlow, {
 } from "reactflow";
 import { MainContext } from "../context/MainContext";
 import { BoardMenu, Popup } from "../components";
-import { TransferNode, CadenceNode, TriggerNode } from "../components/nodes/";
+import {
+  TransferNode,
+  CadenceNode,
+  TriggerNode,
+  CustomNode,
+} from "../components/nodes/";
 
 import "reactflow/dist/style.css";
+import { cleanJson } from "../utils/jsonCleaner";
 const initialNodes = [
   {
     id: "START",
@@ -30,6 +36,7 @@ const nodeTypes = {
   TRANSFER_NATIVE: TransferNode,
   CADENCE: CadenceNode,
   TRIGGER: TriggerNode,
+  CUSTOM_NODE: CustomNode,
 };
 
 export const Board = () => {
@@ -55,7 +62,7 @@ export const Board = () => {
           wrap="hard"
           className="border border-gray-300 rounded p-2 w-full my-4 text-black text-sm"
           type="textarea"
-          value={JSON.stringify({ nodes, edges })}
+          value={JSON.stringify(cleanJson({ nodes, edges }), null, 2)}
           readOnly
         />
       </Popup>

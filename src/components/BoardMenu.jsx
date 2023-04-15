@@ -76,7 +76,26 @@ export const BoardMenu = ({
   };
 
   const linkAddClicked = async () => {
-    await importEtherscanTX(etherscanLink);
+    const res = await importEtherscanTX(etherscanLink);
+    console.log({ res });
+    const newCustomNode = {
+      id: "CUSTOM_NODE_" + res.functionSelector,
+      position: { x: 350, y: 350 },
+      type: "CUSTOM_NODE",
+      data: {
+        chainId: 10,
+        label: res.functionName,
+        value: res.transaction.value,
+        target: res.transaction.to,
+        functionName: res.functionName,
+        params: [...res.decoded],
+        functionSelector: res.functionSelector,
+      },
+    };
+    setNodes((nodes) => [
+      ...nodes.filter((n) => n.id !== newCustomNode.id),
+      newCustomNode,
+    ]);
   };
 
   const handleLinkChange = (event) => {

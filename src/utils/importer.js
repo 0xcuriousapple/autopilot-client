@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 export const importEtherscanTX = async (link) => {
   const res = await getTransactionDetails(link);
   console.log({ res });
+  return res;
 };
 
 const API_KEY = "V7H5EGUF556B4BEWT4UWNAW8PD2FPIMXD2";
@@ -51,11 +52,16 @@ async function getTransactionDetails(etherscanTransactionLink) {
         const functionFragment =
           contractInterface.getFunction(functionSelector);
         console.log("Function Name:", functionFragment.name);
-        console.log(
-          "Function Parameters:",
-          contractInterface.decodeFunctionData(functionFragment, inputData)
+        const decoded = contractInterface.decodeFunctionData(
+          functionFragment,
+          inputData
         );
-        // TODO: handle result
+        return {
+          functionName: functionFragment.name,
+          functionSelector,
+          transaction,
+          decoded,
+        };
       } else {
         console.log(
           "Unable to fetch ABI for contract address",
