@@ -24,14 +24,14 @@ body {
     radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
 }
 
-.gradient-bg-services {
-  background-color: #0f0e13;
-  background-image: radial-gradient(
-      at 0% 0%,
-      hsla(253, 16%, 7%, 1) 0,
-      transparent 50%
-    ),
-    radial-gradient(at 50% 100%, hsla(225, 39%, 25%, 1) 0, transparent 50%);
+.gradient-bg-popup {
+  background-color: #4158d0;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
 }
 
 .gradient-bg-transactions {
@@ -72,8 +72,22 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(30deg);
+  }
+  80% {
+    transform: translateX(-100%) translateY(-100%) rotate(30deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(30deg);
+  }
+}
+
 .eth-card {
   background-color: #a099ff;
+  position: relative;
+  overflow: hidden;
   background-image: radial-gradient(
       at 83% 67%,
       rgb(152, 231, 156) 0,
@@ -85,6 +99,25 @@ body {
     radial-gradient(at 27% 71%, hsla(336, 91%, 65%, 1) 0, transparent 49%),
     radial-gradient(at 74% 89%, hsla(30, 98%, 65%, 1) 0, transparent 51%),
     radial-gradient(at 53% 75%, hsla(174, 94%, 68%, 1) 0, transparent 45%);
+}
+
+.eth-card::after {
+  content: "";
+  top: 0;
+  transform: translateX(100%) rotate(30deg);
+  width: 300%;
+  height: 300%;
+  position: absolute;
+  z-index: 1;
+  animation: shine 3s infinite ease-in;
+  animation-delay: 2s;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(128, 186, 232, 0) 99%,
+    rgba(128, 186, 232, 0) 100%
+  );
 }
 
 .text-gradient {

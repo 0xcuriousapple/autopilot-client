@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
@@ -7,7 +7,10 @@ import { transfer } from "../utils/account";
 import { AccountContext } from "../context/AccountContext";
 import { shortenAddress } from "../utils/shortenAddress";
 import { Loader } from ".";
+import { Popup } from ".";
 import { ethers } from "ethers";
+import { FiCopy } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const companyCommonStyles =
   "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
@@ -23,9 +26,18 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 );
 
-export const Welcome = () => {
-  const { currentAccount, isLoading, setIsLoading, deployed, balance } =
-    useContext(AccountContext);
+export const CardHero = () => {
+  const {
+    currentAccount,
+    isLoading,
+    setIsLoading,
+    deployed,
+    balance,
+    showPopup,
+    setShowPopup,
+  } = useContext(AccountContext);
+
+  const [addressCopied, setAddressCopied] = useState(false);
 
   // const handleSubmit = (e) => {
   //   const { addressTo, amount, keyword, message } = formData;
@@ -36,20 +48,57 @@ export const Welcome = () => {
 
   //   sendTransaction();
   // };
-
+  const handleCopyAddress = () => {
+    navigator.clipboard.writeText(currentAccount);
+    setAddressCopied(true);
+    setTimeout(() => setAddressCopied(false), 2000);
+  };
   const createAccount = async () => {
     setIsLoading(true);
     // transfer 0 to zero address to create account
     await transfer(ethers.constants.AddressZero, "0");
     setIsLoading(false);
   };
-
   return (
     <>
       {isLoading ? (
         <Loader />
       ) : (
         <div className="flex w-full justify-center items-center">
+          <Popup show={showPopup} onClose={() => setShowPopup(false)}>
+            <h2 className="text-2xl font-bold mb-4">Insufficent Funds</h2>
+            <p className="inline-flex">
+              You need to transfer funds to pay for the gas fee to create a new
+              account. <br />
+              Please transfer{" "}
+              {ethers.utils
+                .formatEther(
+                  ethers.utils
+                    .parseEther("0.3")
+                    .sub(ethers.utils.parseEther(balance))
+                )
+                .toString()}{" "}
+              ether to the address below.
+            </p>
+
+            <div className="relative">
+              <input
+                className="border border-gray-300 rounded p-2 w-full my-4 text-black text-sm"
+                type="text"
+                value={currentAccount}
+                readOnly
+              />
+              <button
+                className="absolute top-0 right-0 h-full p-2 pl-4 text-gray-500 hover:text-gray-700"
+                onClick={handleCopyAddress}
+              >
+                <FiCopy size={18} />
+              </button>
+            </div>
+            <p className="mb-4">
+              {addressCopied ? "Address copied to clipboard!" : ""}
+            </p>
+          </Popup>
           <div className="flex mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
             <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
               <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
@@ -66,13 +115,15 @@ export const Welcome = () => {
                   className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
                 >
                   <AiFillPlayCircle className="text-white mr-2" />
-                  <p className="text-white text-base font-semibold">
-                    Configure Account
-                  </p>
+                  <Link to="/board">
+                    <p className="text-white text-base font-semibold">
+                      Configure Account
+                    </p>
+                  </Link>
                 </button>
               ) : ethers.utils
                   .parseEther(balance)
-                  .gte(ethers.utils.parseEther("0.05")) ? (
+                  .gte(ethers.utils.parseEther("0.3")) ? (
                 <button
                   type="button"
                   onClick={createAccount}
@@ -86,12 +137,12 @@ export const Welcome = () => {
               ) : (
                 <button
                   type="button"
-                  onClick={getAddress}
+                  onClick={() => setShowPopup(true)}
                   className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
                 >
                   <AiFillPlayCircle className="text-white mr-2" />
                   <p className="text-white text-base font-semibold">
-                    Top-up Account
+                    Create Account
                   </p>
                 </button>
               )}

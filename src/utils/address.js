@@ -38,8 +38,9 @@ const getAccountBalance = async (address) => {
 
     // Get the balance in wei (smallest unit of Ether)
     const balanceWei = await provider.getBalance(address);
+    const balanceEth = ethers.utils.formatEther(balanceWei);
 
-    return balanceWei;
+    return balanceEth;
   } catch (error) {
     console.error("Error getting Ether balance:", error);
     return null;

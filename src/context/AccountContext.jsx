@@ -14,7 +14,7 @@ export const AccountProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [deployed, setDeployed] = useState(false);
   const [balance, setBalance] = useState("0");
-
+  const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +39,8 @@ export const AccountProvider = ({ children }) => {
         isLoading,
         deployed,
         balance,
+        showPopup,
+        setShowPopup,
       }}
     >
       {children}

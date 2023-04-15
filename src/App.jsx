@@ -1,22 +1,12 @@
-import {
-  Loader,
-  Navbar,
-  Footer,
-  Services,
-  Transactions,
-  Welcome,
-} from "./components";
-
+import { Home, Board } from "./pages";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 export default function App() {
   return (
-    <div className="min-h-screen">
-      <div className="gradient-bg-welcome h-screen">
-        <Navbar />
-        <Welcome />
-      </div>
-      {/* <Services />
-      <Transactions />
-      <Footer /> */}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/board" element={<Board />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
