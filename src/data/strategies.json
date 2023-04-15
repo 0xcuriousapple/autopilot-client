@@ -2,17 +2,54 @@
   "SCHEDULED_TX": {
     "name": "Scheduled TX",
     "info": "Schedule a transaction to happen in future",
-    "nodes": ["START", "TRANSFER_NATIVE", "END"],
+    "nodes": ["TRIGGER", "START", "TRANSFER_NATIVE", "END"],
     "edges": [
       {
         "id": "e1-2",
+        "source": "TRIGGER",
+        "target": "START"
+      },
+      {
+        "id": "e2-3",
         "source": "START",
         "target": "TRANSFER_NATIVE"
       },
       {
-        "id": "e2-3",
+        "id": "e3-4",
         "source": "TRANSFER_NATIVE",
         "target": "END"
+      }
+    ]
+  },
+  "RECURRING_TX": {
+    "name": "Recurring TX",
+    "info": "Schedule a recurring transaction to run multiple times",
+    "nodes": ["TRIGGER", "START", "TRANSFER_NATIVE", "END", "CADENCE"],
+    "edges": [
+      {
+        "id": "e1-2",
+        "source": "TRIGGER",
+        "target": "START"
+      },
+      {
+        "id": "e2-3",
+        "source": "START",
+        "target": "TRANSFER_NATIVE"
+      },
+      {
+        "id": "e3-4",
+        "source": "TRANSFER_NATIVE",
+        "target": "END"
+      },
+      {
+        "id": "e4-5",
+        "source": "END",
+        "target": "CADENCE"
+      },
+      {
+        "id": "e5-1",
+        "source": "CADENCE",
+        "target": "START"
       }
     ]
   },

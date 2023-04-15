@@ -2,28 +2,37 @@
   "START": {
     "id": "START",
     "position": { "x": 200, "y": 200 },
-    "data": { "label": "Start" },
-    "type": "input"
+    "data": { "label": "Start" }
   },
   "END": {
     "id": "END",
     "position": { "x": 500, "y": 500 },
-    "data": { "label": "End" },
-    "type": "output"
+    "data": { "label": "End" }
   },
-
+  "TRIGGER": {
+    "id": "TRIGGER",
+    "type": "TRIGGER",
+    "position": { "x": 100, "y": 0 },
+    "data": { "label": "Trigger", "date": "" }
+  },
+  "CADENCE": {
+    "id": "CADENCE",
+    "type": "CADENCE",
+    "position": { "x": 600, "y": 300 },
+    "data": { "label": "Replay", "count": "", "cadence": "" }
+  },
   "TRANSFER_NATIVE": {
     "id": "TRANSFER_NATIVE",
-    "type": "textField",
+    "type": "TRANSFER_NATIVE",
     "position": { "x": 300, "y": 300 },
     "data": {
       "chainId": null,
       "label": "Transfer ETH",
-      "target": null,
+      "target": "",
       "functionName": null,
       "value": 0,
       "params": [],
-      "functionSelector": null
+      "functionSelector": []
     }
   },
   "CLAIM_SNX_REWARDS_OP": {

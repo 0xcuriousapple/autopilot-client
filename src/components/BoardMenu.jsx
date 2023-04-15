@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import config from "../utils/config.json";
+
+import { MainContext } from "../context/MainContext";
 import { BsGear } from "react-icons/bs";
 import { BsXLg } from "react-icons/bs";
 import { nodes, strategies } from "../data";
+import { authorise } from "../utils/account";
+import { importEtherscanTX } from "../utils/importer";
+import { Loader } from "./";
 
-export const BoardMenu = ({ setNodes, setEdges }) => {
+export const BoardMenu = ({
+  setNodes,
+  setEdges,
+  currentNodes,
+  setShowPopup,
+}) => {
   const [etherscanLink, setEtherscanLink] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selectedStrategy, setSelectedStrategy] = useState("SCHEDULED_TX");
   const [selectedNode, setSelectedNode] = useState("TRANSFER_NATIVE");
+  const { currentAccount, isLoading, setIsLoading } = useContext(MainContext);
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -15,32 +27,28 @@ export const BoardMenu = ({ setNodes, setEdges }) => {
 
   const nodeAddClicked = () => {
     const newNode = nodes[selectedNode];
-    if (newNode.type === "textField") {
-      newNode.data = { onChange, ...newNode.data };
+
+    if (
+      newNode.type === "TRIGGER" ||
+      newNode.type === "CADENCE" ||
+      newNode.type === "TRANSFER_NATIVE"
+    ) {
+      newNode.data.onChange = onChange;
     }
-    setNodes((nodes) => [...nodes, newNode]);
+    setNodes((nodes) => [...nodes.filter((n) => n.id !== newNode.id), newNode]);
   };
 
   const handleNodeChange = (event) => {
     setSelectedNode(event.target.value);
   };
 
-  const onChange = (event) => {
+  const onChange = (value, field, id) => {
     setNodes((nds) =>
       nds.map((node) => {
-        if (node.id !== "TRANSFER_NATIVE") {
-          return node;
+        if (node.id === id) {
+          node.data[field] = value;
         }
-
-        const amount = event.target.value;
-
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            value: amount,
-          },
-        };
+        return node;
       })
     );
   };
@@ -49,11 +57,15 @@ export const BoardMenu = ({ setNodes, setEdges }) => {
     const strategy = strategies[selectedStrategy];
     const edgeArray = strategy.edges;
     const nodeArray = strategy.nodes.map((node) => {
-      if (node.type === "textField") {
-        return { data: { onChange, ...nodes[node].data }, ...nodes[node] };
-      } else {
-        return nodes[node];
+      const newNode = nodes[node];
+      if (
+        node === "TRIGGER" ||
+        node === "CADENCE" ||
+        node === "TRANSFER_NATIVE"
+      ) {
+        newNode.data.onChange = onChange;
       }
+      return newNode;
     });
     setNodes((_) => nodeArray);
     setEdges((_) => edgeArray);
@@ -63,12 +75,23 @@ export const BoardMenu = ({ setNodes, setEdges }) => {
     setSelectedStrategy(event.target.value);
   };
 
-  const linkAddClicked = () => {
-    console.log(etherscanLink);
+  const linkAddClicked = async () => {
+    await importEtherscanTX(etherscanLink);
   };
 
   const handleLinkChange = (event) => {
     setEtherscanLink(event.target.value);
+  };
+
+  const autorise = async () => {
+    setIsLoading(true);
+    try {
+      await authorise(currentAccount, config.bot, currentNodes);
+      setShowPopup(true);
+    } catch (error) {
+      console.log({ error });
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -98,7 +121,7 @@ export const BoardMenu = ({ setNodes, setEdges }) => {
                 .filter((key) => key != "default")
                 .map((key) => (
                   <option value={key} key={key}>
-                    {nodes[key].id}
+                    {nodes[key].data.label}
                   </option>
                 ))}
             </select>
@@ -146,6 +169,16 @@ export const BoardMenu = ({ setNodes, setEdges }) => {
               Import Action
             </button>
           </div>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <button
+              className="bg-white border border-gray-300 text-gray-800 font-semibold py-2 px-6 rounded hover:bg-gray-100 mt-4 mw-500"
+              onClick={autorise}
+            >
+              Autorise
+            </button>
+          )}
         </div>
       )}
     </div>
