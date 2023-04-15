@@ -4,7 +4,7 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { getAddress } from "../utils/address";
 import { transfer } from "../utils/account";
-import { AccountContext } from "../context/AccountContext";
+import { MainContext } from "../context/MainContext";
 import { shortenAddress } from "../utils/shortenAddress";
 import { Loader } from ".";
 import { Popup } from ".";
@@ -35,7 +35,7 @@ export const CardHero = () => {
     balance,
     showPopup,
     setShowPopup,
-  } = useContext(AccountContext);
+  } = useContext(MainContext);
 
   const [addressCopied, setAddressCopied] = useState(false);
 

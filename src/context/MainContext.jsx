@@ -6,11 +6,11 @@ import {
   getAccountBalance,
 } from "../utils/address";
 
-export const AccountContext = React.createContext();
+export const MainContext = React.createContext();
 
 const { ethereum } = window;
 
-export const AccountProvider = ({ children }) => {
+export const MainContextProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [deployed, setDeployed] = useState(false);
   const [balance, setBalance] = useState("0");
@@ -32,7 +32,7 @@ export const AccountProvider = ({ children }) => {
   }, []);
 
   return (
-    <AccountContext.Provider
+    <MainContext.Provider
       value={{
         currentAccount,
         setIsLoading,
@@ -44,6 +44,6 @@ export const AccountProvider = ({ children }) => {
       }}
     >
       {children}
-    </AccountContext.Provider>
+    </MainContext.Provider>
   );
 };
