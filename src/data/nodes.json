@@ -1,0 +1,53 @@
+{
+  "START": {
+    "id": "START",
+    "position": { "x": 200, "y": 200 },
+    "data": { "label": "Start" },
+    "type": "input"
+  },
+  "END": {
+    "id": "END",
+    "position": { "x": 500, "y": 500 },
+    "data": { "label": "End" },
+    "type": "output"
+  },
+
+  "TRANSFER_NATIVE": {
+    "id": "TRANSFER_NATIVE",
+    "type": "textField",
+    "position": { "x": 300, "y": 300 },
+    "data": {
+      "chainId": null,
+      "label": "Transfer ETH",
+      "target": null,
+      "functionName": null,
+      "value": 0,
+      "params": [],
+      "functionSelector": null
+    }
+  },
+  "CLAIM_SNX_REWARDS_OP": {
+    "id": "CLAIM_SNX_REWARDS_OP",
+    "position": { "x": 300, "y": 300 },
+    "data": {
+      "chainId": 10,
+      "label": "Claim Staking Rewards",
+      "target": "0x4a16A42407AA491564643E1dfc1fd50af29794eF",
+      "functionName": "claimFees",
+      "params": [],
+      "functionSelector": "0xd294f093"
+    }
+  },
+  "ISSUE_MAX_SYNT_OP": {
+    "id": "ISSUE_MAX_SYNT_OP",
+    "position": { "x": 400, "y": 400 },
+    "data": {
+      "chainId": 10,
+      "label": "Restake All SNX",
+      "target": "0x4a16A42407AA491564643E1dfc1fd50af29794eF",
+      "functionName": "issueMaxSynths",
+      "params": [],
+      "functionSelector": "0xaf086c7e"
+    }
+  }
+}

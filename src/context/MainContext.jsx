@@ -21,7 +21,6 @@ export const MainContextProvider = ({ children }) => {
     const fetchData = async () => {
       const fetchedAddress = await getAddress();
       setCurrentAccount(fetchedAddress);
-      console.log({ fetchedAddress });
       const isDeployed = await isContractAddress(fetchedAddress);
       setDeployed(isDeployed);
       const balance = await getAccountBalance(fetchedAddress);

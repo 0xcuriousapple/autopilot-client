@@ -1,0 +1,58 @@
+{
+  "SCHEDULED_TX": {
+    "name": "Scheduled TX",
+    "info": "Schedule a transaction to happen in future",
+    "nodes": ["START", "TRANSFER_NATIVE", "END"],
+    "edges": [
+      {
+        "id": "e1-2",
+        "source": "START",
+        "target": "TRANSFER_NATIVE"
+      },
+      {
+        "id": "e2-3",
+        "source": "TRANSFER_NATIVE",
+        "target": "END"
+      }
+    ]
+  },
+  "SNX_CLAIM_OP": {
+    "name": "SNX Claim (OP)",
+    "info": "Claim Weekly SNX Rewards on Optimism",
+    "nodes": ["START", "CLAIM_SNX_REWARDS_OP", "END"],
+    "edges": [
+      {
+        "id": "e1-2",
+        "source": "START",
+        "target": "CLAIM_SNX_REWARDS_OP"
+      },
+      {
+        "id": "e2-3",
+        "source": "CLAIM_SNX_REWARDS_OP",
+        "target": "END"
+      }
+    ]
+  },
+  "SNX_CLAIM_RESTAKE_OP": {
+    "name": "SNX Claim and Restake (OP)",
+    "info": "Claim And Restake Weekly SNX Rewards on Optimism",
+    "nodes": ["START", "CLAIM_SNX_REWARDS_OP", "ISSUE_MAX_SYNT_OP", "END"],
+    "edges": [
+      {
+        "id": "e1-2",
+        "source": "START",
+        "target": "CLAIM_SNX_REWARDS_OP"
+      },
+      {
+        "id": "e2-3",
+        "source": "CLAIM_SNX_REWARDS_OP",
+        "target": "ISSUE_MAX_SYNT_OP"
+      },
+      {
+        "id": "e3-4",
+        "source": "ISSUE_MAX_SYNT_OP",
+        "target": "END"
+      }
+    ]
+  }
+}
